@@ -1,0 +1,29 @@
+.dashboard {
+  padding: 2rem;
+  max-width: 800px;
+  margin: auto;
+}
+
+.user-list {
+  margin-top: 2rem;
+}
+
+.user-item {
+  background: #f0f0f0;
+  padding: 1rem;
+  margin-bottom: 0.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 4px;
+}
+
+.user-item input {
+  margin-right: 0.5rem;
+}
+
+button {
+  margin-left: 0.5rem;
+  padding: 0.4rem 0.8rem;
+  cursor: pointer;
+}

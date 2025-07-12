@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import AddUserForm from '../components/AddUserForm';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import AddUserForm from '../components/AddUserForm';
 
-function Dashboard() {
-  const navigate = useNavigate();
+function Users() {
   const [users, setUsers] = useState([]);
   const [editUserId, setEditUserId] = useState(null);
   const [editedUser, setEditedUser] = useState({ name: '', email: '' });
@@ -12,7 +10,7 @@ function Dashboard() {
   const fetchUsers = () => {
     const token = localStorage.getItem('token');
     axios.get('http://localhost:5000/api/users', {
-      headers: { Authorization: `Bearer ${token}` },
+      headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => setUsers(res.data))
       .catch(err => console.error(err));
@@ -21,11 +19,6 @@ function Dashboard() {
   useEffect(() => {
     fetchUsers();
   }, []);
-
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    navigate('/');
-  };
 
   const handleDelete = async (id) => {
     const token = localStorage.getItem('token');
@@ -39,6 +32,7 @@ function Dashboard() {
       fetchUsers();
     } catch (err) {
       console.error(err);
+      alert('Failed to delete user');
     }
   };
 
@@ -57,13 +51,13 @@ function Dashboard() {
       fetchUsers();
     } catch (err) {
       console.error(err);
+      alert('Failed to update user');
     }
   };
 
   return (
-    <div className="container">
-      <h2>📋 Dashboard</h2>
-      <button onClick={handleLogout} style={{ marginBottom: '20px' }}>🚪 Logout</button>
+    <div style={{ padding: '20px' }}>
+      <h2>👤 Manage Users</h2>
       <AddUserForm onUserAdded={fetchUsers} />
 
       <ul>
@@ -74,10 +68,12 @@ function Dashboard() {
                 <input
                   value={editedUser.name}
                   onChange={(e) => setEditedUser({ ...editedUser, name: e.target.value })}
+                  placeholder="Name"
                 />
                 <input
                   value={editedUser.email}
                   onChange={(e) => setEditedUser({ ...editedUser, email: e.target.value })}
+                  placeholder="Email"
                 />
                 <button onClick={() => handleUpdate(user._id)}>💾 Save</button>
                 <button onClick={() => setEditUserId(null)}>❌ Cancel</button>
@@ -85,8 +81,13 @@ function Dashboard() {
             ) : (
               <>
                 {user.name} — {user.email}
-                <button onClick={() => handleEdit(user)}>✏️</button>
-                <button onClick={() => handleDelete(user._id)}>🗑️</button>
+                <button onClick={() => handleEdit(user)} style={{ marginLeft: '10px' }}>✏️ Edit</button>
+                <button
+                  onClick={() => handleDelete(user._id)}
+                  style={{ marginLeft: '10px', color: 'red' }}
+                >
+                  🗑️ Delete
+                </button>
               </>
             )}
           </li>
@@ -96,4 +97,4 @@ function Dashboard() {
   );
 }
 
-export default Dashboard;
+export default Users;
